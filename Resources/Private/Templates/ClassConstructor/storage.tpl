@@ -1,0 +1,1 @@
+###THIS###->###KEY_PLURAL_LOWER### = new Tx_Extbase_Persistence_ObjectStorage();
