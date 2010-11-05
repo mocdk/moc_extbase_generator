@@ -58,6 +58,7 @@ class MOC_Extbase_Generator {
 		foreach ($files as $filepath) {
 			$file = basename($filepath, '.php');
 			$className = sprintf('Tx_%s_Domain_Configuration_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $file);
+			$this->className = sprintf('Tx_%s_Domain_Model_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $file);
 
 			if (!empty($this->models) && false === array_search(strtolower($file), $this->models)) {
 				printf("Skipping model: %s\n", $className);
@@ -82,8 +83,8 @@ class MOC_Extbase_Generator {
 		$this->reset();
 
 		$keys = $ModelConfigurationInstance->getKeys();
-		$keys = $this->preprocessKeys($keys);
 
+		$keys = $this->preprocessKeys($keys);
 		$this->buildClassProperties($keys);
 
 		if ($this->buildConstructor) {
@@ -107,14 +108,13 @@ class MOC_Extbase_Generator {
 		$output[] = $this->pad(1, join($this->output['ClassProperties'], "\n\n"));
 		$output[] = '';
 
+		// Disabled for now
 		if ($this->buildConstructor) {
 			$output[] = '	/**';
 			$output[] = '	 * Object initializer';
 			$output[] = '	 *';
 			$output[] = '	 */';
-			$output[] = '	public function initializeObject() {';
-			$output[] = '		parent::initializeObject();';
-			$output[] = '';
+			$output[] = '	protected function initializeObject() {';
 			$output[] = $this->pad(2, join($this->output['ClassConstructor'], "\n"));
 			$output[] = '	}';
 		}
@@ -189,6 +189,16 @@ class MOC_Extbase_Generator {
 
 	protected function buildConstructor($keys) {
 		foreach($keys as $key => $values) {
+			// No need for constructor on normal strings
+			if ($values['type'] === 'default') {
+				continue;
+			}
+
+			// Avoid endless loop
+			if ($values['var'] === $this->className) {
+				continue;
+			}
+
 			$replace = $this->getKeyMarkers($values);
 			$def 	 = $this->loadClassConstructorTemplate($values['type']);
 			$this->output['ClassConstructor'][$key] = $this->applyMarkers($def, $replace);
@@ -211,7 +221,13 @@ class MOC_Extbase_Generator {
 				$fixed_key = MOC_Inflector::variable($values['key']);
 				$keys[$key]['key'] = $fixed_key;
 			}
+
+			// Make sure to switch to object template if it's a class
+			if (class_exists($keys[$key]['var'])) {
+				$keys[$key]['type'] = 'object';
+			}
 		}
+
 		return $keys;
 	}
 
