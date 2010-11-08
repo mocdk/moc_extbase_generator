@@ -44,9 +44,11 @@ class MOC_Extbase_Generator {
 			throw new MOC_Exception(sprintf('Configuration folder %s does not exists', $this->configPath));
 		}
 
-		if (!empty($models) && !is_array($models)) {
+		if (!empty($this->models) && !is_array($this->models)) {
 			throw new MOC_Exception('Model list is not an array!');
 		}
+
+		$this->models = array_map('strtolower', $this->models);
 	}
 
 	public function process() {
@@ -59,7 +61,6 @@ class MOC_Extbase_Generator {
 			$file = basename($filepath, '.php');
 			$className = sprintf('Tx_%s_Domain_Configuration_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $file);
 			$this->className = sprintf('Tx_%s_Domain_Model_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $file);
-
 			if (!empty($this->models) && false === array_search(strtolower($file), $this->models)) {
 				printf("Skipping model: %s\n", $className);
 				continue;
@@ -83,8 +84,8 @@ class MOC_Extbase_Generator {
 		$this->reset();
 
 		$keys = $ModelConfigurationInstance->getKeys();
-
 		$keys = $this->preprocessKeys($keys);
+
 		$this->buildClassProperties($keys);
 
 		if ($this->buildConstructor) {
@@ -148,7 +149,7 @@ class MOC_Extbase_Generator {
 		$key = $values['key'];
 
 		$replace = array();
-		$replace['###KEY###'] 					= MOC_Inflector::camelize(MOC_Inflector::variable(MOC_Inflector::singularize($key)));
+		$replace['###KEY###'] 					= MOC_Inflector::variable(MOC_Inflector::singularize($key));
 		$replace['###KEY_PLURAL###'] 			= MOC_Inflector::camelize(MOC_Inflector::pluralize($key));
 		$replace['###KEY_SINGULAR###']			= MOC_Inflector::camelize(MOC_Inflector::singularize($key));
 
@@ -162,6 +163,8 @@ class MOC_Extbase_Generator {
 		$replace['###DEFAULT_VALUE###'] 		= $values['default'];
 		$replace['###DESC###']					= $values['desc'];
 		$replace['###VAR###']					= $values['var'];
+
+		$replace['###SELF###']					= $this->className;
 
 		return $replace;
 	}
@@ -206,25 +209,25 @@ class MOC_Extbase_Generator {
 	}
 
 	protected function preprocessKeys($keys) {
-		foreach ($keys as $key => $values) {
-			$keys[$key] = $values = array_merge($this->defaultTemplateValues, $values);
+		foreach ($keys as $key => &$values) {
+			$values = array_merge($this->defaultTemplateValues, $values);
 
 			if (($values['type'] == 'storage') || ($values['var'] == 'DateTime')) {
 				$this->buildConstructor = true;
 			}
 
 			if (empty($values['key'])) {
-				$values['key'] = $keys[$key]['key'] = $key;
+				$values['key'] = $key;
 			}
 
 			if (stripos($values['key'], '_') !== false) {
 				$fixed_key = MOC_Inflector::variable($values['key']);
-				$keys[$key]['key'] = $fixed_key;
+				$values['key'] = $fixed_key;
 			}
 
 			// Make sure to switch to object template if it's a class
-			if (class_exists($keys[$key]['var'])) {
-				$keys[$key]['type'] = 'object';
+			if (class_exists($values['var']) && empty($values['extbase']['type'])) {
+				$values['type'] = 'object';
 			}
 		}
 

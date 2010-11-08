@@ -4,10 +4,11 @@
  * ###DESC###
  *
  * @param ###VAR### $###KEY###
- * @return void
+ * @return ###SELF###
  */
-public function set###KEY_SINGULAR###(###VAR### $###KEY###) {
-	###THIS###->###KEY_SINGULAR_LOWER### = $###KEY_SINGULAR###;
+public function set###KEY_SINGULAR###($###KEY_SINGULAR_LOWER###) {
+	###THIS###->###KEY_SINGULAR_LOWER### = $###KEY_SINGULAR_LOWER###;
+	return ###THIS###;
 }
 
 /**

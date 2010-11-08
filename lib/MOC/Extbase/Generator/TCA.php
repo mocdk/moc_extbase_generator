@@ -4,6 +4,7 @@ class MOC_Extbase_Generator_TCA extends MOC_Extbase_Generator_Configuration {
 		if (empty($this->table)) {
 			throw new MOC_Exception('Undefined table setting for generator configuration object');
 		}
+
 		if (empty($GLOBALS['TCA'][$this->table])) {
 			throw new MOC_Exception(sprintf('No TCA configuration for table %s available', $this->table));
 		}
@@ -53,7 +54,7 @@ class MOC_Extbase_Generator_TCA extends MOC_Extbase_Generator_Configuration {
 		}
 
 		if (!empty($ctrl['cruser_id'])) {
-			$columns[$ctrl['cruser_id']] = array('var' => 'Tx_Extbase_Domain_Model_FrontendUser', 'desc' => 'The UID of the user who created the record');
+			$columns[$ctrl['cruser_id']] = array('var' => 'Tx_Extbase_Domain_Model_FrontendUser', 'desc' => 'The UID of the user who created the record', 'annotations' => array('lazy'));
 		}
 
 		if (!empty($ctrl['delete'])) {
@@ -64,6 +65,40 @@ class MOC_Extbase_Generator_TCA extends MOC_Extbase_Generator_Configuration {
 			$columns[$ctrl['enablecolumns']['disabled']] = array('var' => 'boolean', 'desc' => 'Has the record been marked as hidden?');
 		}
 
+		$db_columns = MOC_DB::tableFields($this->table);
+		foreach ($db_columns as $column => $settings) {
+			if (array_key_exists($column, $columns)) {
+				continue;
+			}
+			$columns[$column] = $this->introspectColumn($settings);
+		}
+
+		// UID is special case :|
+		if (array_key_exists('uid', $columns)) {
+			unset($columns['uid']);
+		}
+
 		return $columns;
+	}
+
+	protected function introspectColumn($settings) {
+		$type = MOC_DB::columnType($settings['Type']);
+		switch ($type) {
+			case 'boolean':
+			case 'integer':
+			case 'string':
+			case 'text':
+			case 'binary':
+			case 'float':
+				$type = $type;
+				break;
+			default:
+				$type = 'string';
+				break;
+		}
+
+		return array(
+			'var' => $type
+		);
 	}
 }
