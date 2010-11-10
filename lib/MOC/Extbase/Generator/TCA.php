@@ -78,6 +78,11 @@ class MOC_Extbase_Generator_TCA extends MOC_Extbase_Generator_Configuration {
 			unset($columns['uid']);
 		}
 
+		// PID is a special case too :|
+		if (array_key_exists('pid', $columns)) {
+			unset($columns['pid']);
+		}
+
 		return $columns;
 	}
 
