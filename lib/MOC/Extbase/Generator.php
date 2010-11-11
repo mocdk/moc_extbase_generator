@@ -17,7 +17,7 @@ class MOC_Extbase_Generator {
 		'type' 		=> 'default',
 		'var' 		=> 'string',
 		'default' 	=> 'null',
-		'desc' 		=> '@todo Make a good description',
+		'desc' 		=> '@todo Make a good description in the TCA ($column.extbase.desc)',
 		'annotations' => array(
 
 		)
