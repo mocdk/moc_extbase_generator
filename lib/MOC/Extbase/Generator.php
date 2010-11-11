@@ -99,13 +99,14 @@ class MOC_Extbase_Generator {
 
 	protected function writeBaseClass() {
 		$className = sprintf('Tx_%s_Domain_Model_Base_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $this->currentFile);
+		$extendsClass = class_exists('Tx_MocHelpers_Domain_Model_Abstract') ? 'Tx_MocHelpers_Domain_Model_Abstract' : 'Tx_Extbase_DomainObject_AbstractEntity';
 
 		$output = array();
 		$output[] = '<?php';
 		$output[] = '/**';
 		$output[] = ' * Generated on ' . date('r');
 		$output[] = ' */';
-		$output[] = 'abstract class ' . $className . ' extends Tx_Extbase_DomainObject_AbstractEntity {';
+		$output[] = 'abstract class ' . $className . ' extends ' . $extendsClass . ' {';
 		$output[] = $this->pad(1, join($this->output['ClassProperties'], "\n\n"));
 		$output[] = '';
 
@@ -165,18 +166,49 @@ class MOC_Extbase_Generator {
 		$replace['###VAR###']					= $values['var'];
 
 		$replace['###SELF###']					= $this->className;
+		$replace['###ANNOTATIONS###']			= '';
+
+		if (!empty($values['annotations'])) {
+			foreach ($values['annotations'] as $annotation) {
+				$replace['###ANNOTATIONS###'] .= sprintf("\n * @%s", $annotation);
+			}
+		}
+
+		if (!empty($values['validations'])) {
+			$validationRules = MOC_Array::normalize($values['validations']);
+			foreach ($validationRules as $rule => $args) {
+				$replace['###ANNOTATIONS###'] .= sprintf("\n * @validate %s%s", $rule, $this->getValidationParams($args, $rule, $key));
+			}
+		}
+
+		if (!empty($replace['###ANNOTATIONS####'])) {
+			$replace['###ANNOTATIONS####'] = "\n *\n *" . $replace['###ANNOTATIONS###'];
+
+		}
 
 		return $replace;
+	}
+
+	protected function getValidationParams($args, $rule = null, $key = null) {
+		if (empty($args)) {
+			return '';
+		}
+		if (is_string($args)) {
+			return sprintf('(%s)', $args);
+		}
+		if (is_array($args)) {
+			$rules = "";
+			foreach ($args as $k => $v) {
+				$rules .= sprintf('%s=%s,', $k, $v);
+			}
+			return sprintf('(%s)', trim($rules, ','));
+		}
+		throw new MOC_Exception(sprintf('Invalid validation params for rule %s in key %s in object %s', $rule, $key, $this->className));
 	}
 
 	protected function buildClassProperties($keys) {
 		foreach ($keys as $key => $values) {
 			$replace = $this->getKeyMarkers($values);
-			$replace['###ANNOTATIONS###'] = "\n *";
-			foreach ($values['annotations'] as $annotation) {
-				$replace['###ANNOTATIONS###'] .= sprintf("\n * @%s", $annotation);
-			}
-
 			$def = $this->loadClassPropertyTemplate($values['type']);
 			$this->output['ClassProperties'][$key] = $this->applyMarkers($def, $replace);
 		}
