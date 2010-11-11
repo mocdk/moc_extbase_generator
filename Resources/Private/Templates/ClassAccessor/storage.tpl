@@ -5,7 +5,7 @@
  * @return ###SELF###
  */
 public function set###KEY_PLURAL###(Tx_Extbase_Persistence_ObjectStorage $###KEY_PLURAL_LOWER###) {
-	###THIS###->###KEY_PLURAL_LOWER### = $###KEY_PLURAL_LOWER###;
+	###THIS###->###KEY_SINGULAR_LOWER### = $###KEY_PLURAL_LOWER###;
 	return ###THIS###;
 }
 
@@ -15,7 +15,7 @@ public function set###KEY_PLURAL###(Tx_Extbase_Persistence_ObjectStorage $###KEY
  * @return boolean
  */
 public function has###KEY_SINGULAR###(###VAR### $###KEY###) {
-    return $this->###KEY_PLURAL_LOWER###->offsetExists($###KEY###);
+    return $this->###KEY_SINGULAR_LOWER###->offsetExists($###KEY###);
 }
 
 /**
@@ -25,7 +25,7 @@ public function has###KEY_SINGULAR###(###VAR### $###KEY###) {
  * @return ###SELF###
  */
 public function add###KEY_SINGULAR###(###VAR### $###KEY###) {
-	###THIS###->###KEY_PLURAL_LOWER###->attach($###KEY###);
+	###THIS###->###KEY_SINGULAR_LOWER###->attach($###KEY###);
 	return ###THIS###;
 }
 
@@ -36,7 +36,7 @@ public function add###KEY_SINGULAR###(###VAR### $###KEY###) {
  * @return ###SELF###
  */
 public function remove###KEY_SINGULAR###(###VAR### $###KEY###) {
-	###THIS###->###KEY_PLURAL_LOWER###->detatch($###KEY###);
+	###THIS###->###KEY_SINGULAR_LOWER###->detatch($###KEY###);
 	return ###THIS###;
 }
 
@@ -46,7 +46,7 @@ public function remove###KEY_SINGULAR###(###VAR### $###KEY###) {
  * @return ###SELF###
  */
 public function removeAll###KEY_PLURAL###() {
-	###THIS###->###KEY_PLURAL_LOWER### = new Tx_Extbase_Persistence_ObjectStorage();
+	###THIS###->###KEY_SINGULAR_LOWER### = new Tx_Extbase_Persistence_ObjectStorage();
 	return ###THIS###;
 }
 
@@ -56,5 +56,5 @@ public function removeAll###KEY_PLURAL###() {
  * @return ###VAR### An Tx_Extbase_Persistence_ObjectStorage holding instances of ###VAR###
  */
 public function get###CAMEL_CASE###() {
-	return ###THIS###->###KEY_PLURAL_LOWER###;
+	return ###THIS###->###KEY_SINGULAR_LOWER###;
 }
