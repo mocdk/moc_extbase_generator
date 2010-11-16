@@ -15,7 +15,7 @@ public function set###KEY_PLURAL###(Tx_Extbase_Persistence_ObjectStorage $###KEY
  * @return boolean
  */
 public function has###KEY_SINGULAR###(###VAR### $###KEY_SINGULAR_LOWER###) {
-    return $this->###KEY_LOWER###->offsetExists($###KEY_SINGULAR_LOWER###);
+    return true === $this->###KEY_LOWER###->contains($###KEY_SINGULAR_LOWER###);
 }
 
 /**
@@ -53,7 +53,7 @@ public function removeAll###KEY_PLURAL###() {
 /**
  * Returns the ###KEY_PLURAL_LOWER### ###VAR###
  *
- * @return ###VAR### An Tx_Extbase_Persistence_ObjectStorage holding instances of ###VAR###
+ * @return Tx_Extbase_Persistence_ObjectStorage<###VAR###> An Tx_Extbase_Persistence_ObjectStorage holding instances of ###VAR###
  */
 public function get###CAMEL_CASE###() {
 	return ###THIS###->###KEY_LOWER###;
