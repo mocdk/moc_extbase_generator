@@ -150,11 +150,11 @@ class MOC_Extbase_Generator {
 		$key = $values['key'];
 
 		$replace = array();
-		$replace['###KEY###'] 					= MOC_Inflector::variable(MOC_Inflector::singularize($key));
+		$replace['###KEY###'] 					= MOC_Inflector::variable($key);
 		$replace['###KEY_PLURAL###'] 			= MOC_Inflector::camelize(MOC_Inflector::pluralize($key));
 		$replace['###KEY_SINGULAR###']			= MOC_Inflector::camelize(MOC_Inflector::singularize($key));
 
-		$replace['###KEY_LOWER###']				= MOC_Inflector::variable(MOC_Inflector::singularize($key));
+		$replace['###KEY_LOWER###']				= MOC_Inflector::variable($key);
 		$replace['###KEY_PLURAL_LOWER###']		= MOC_Inflector::variable(MOC_Inflector::pluralize($key));
 		$replace['###KEY_SINGULAR_LOWER###'] 	= MOC_Inflector::variable(MOC_Inflector::singularize($key));
 

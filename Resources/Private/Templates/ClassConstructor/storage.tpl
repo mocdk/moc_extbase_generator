@@ -1,1 +1,1 @@
-###THIS###->###KEY_SINGULAR_LOWER### = new Tx_Extbase_Persistence_ObjectStorage();
+###THIS###->###KEY_LOWER### = new Tx_Extbase_Persistence_ObjectStorage();
