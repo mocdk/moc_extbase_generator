@@ -183,7 +183,6 @@ class MOC_Extbase_Generator {
 
 		if (!empty($replace['###ANNOTATIONS####'])) {
 			$replace['###ANNOTATIONS####'] = "\n *\n *" . $replace['###ANNOTATIONS###'];
-
 		}
 
 		return $replace;
