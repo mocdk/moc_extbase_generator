@@ -151,6 +151,7 @@ class MOC_Extbase_Generator {
 
 		$replace = array();
 		$replace['###KEY###'] 					= MOC_Inflector::variable($key);
+		$replace['###KEY_UPPER###'] 			= ucfirst(MOC_Inflector::variable($key));
 		$replace['###KEY_PLURAL###'] 			= MOC_Inflector::camelize(MOC_Inflector::pluralize($key));
 		$replace['###KEY_SINGULAR###']			= MOC_Inflector::camelize(MOC_Inflector::singularize($key));
 

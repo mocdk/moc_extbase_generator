@@ -6,8 +6,8 @@
  * @param ###VAR### $###KEY_SINGULAR_LOWER###
  * @return ###SELF###
  */
-public function set###KEY_SINGULAR###($###KEY_SINGULAR_LOWER###) {
-	###THIS###->###KEY_SINGULAR_LOWER### = $###KEY_SINGULAR_LOWER###;
+public function set###KEY_UPPER###($###KEY_SINGULAR_LOWER###) {
+	###THIS###->###KEY_LOWER### = $###KEY_SINGULAR_LOWER###;
 	return ###THIS###;
 }
 
@@ -18,6 +18,6 @@ public function set###KEY_SINGULAR###($###KEY_SINGULAR_LOWER###) {
  *
  * @return ###VAR###
  */
-public function get###KEY_SINGULAR###() {
-	return ###THIS###->###KEY_SINGULAR_LOWER###;
+public function get###KEY_UPPER###() {
+	return ###THIS###->###KEY_LOWER###;
 }
