@@ -116,7 +116,7 @@ class MOC_Extbase_Generator {
 			$output[] = '	 * Object initializer';
 			$output[] = '	 *';
 			$output[] = '	 */';
-			$output[] = '	protected function initializeObject() {';
+			$output[] = '	public function initializeObject() {';
 			$output[] = $this->pad(2, join($this->output['ClassConstructor'], "\n"));
 			$output[] = '	}';
 		}
