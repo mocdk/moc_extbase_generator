@@ -87,11 +87,13 @@ class MOC_Extbase_Generator {
 		$keys = $this->preprocessKeys($keys);
 
 		$this->buildClassProperties($keys);
-
+		
 		if ($this->buildConstructor) {
 			$this->buildConstructor($keys);
 		}
 
+		
+		
 		$this->buildClassAccessors($keys);
 
 		$this->writeBaseClass();
@@ -110,13 +112,26 @@ class MOC_Extbase_Generator {
 		$output[] = $this->pad(1, join($this->output['ClassProperties'], "\n\n"));
 		$output[] = '';
 
+		
+		
+//		So far, dependency injection into dmain models are not supported in fomai models  (See bug 11311 in forge) 
+//		$output[] = '	/**';
+//	 	$output[] = '	 * Injector for Extbase ObjectManager';
+//	 	$output[] = '	 * @param Tx_Extbase_Object_ObjectManagerInterface $objectManager';
+//	 	$output[] = '	 */';
+//	 	$output[] = '	public function injectObjectManager(Tx_Extbase_Object_ObjectManagerInterface $objectManager) {';
+//		$output[] = '		$this->objectManager = $objectManager;';
+//		$output[] = '	}';
+//		$output[] = '';
+
+		
 		// Disabled for now
 		if ($this->buildConstructor) {
 			$output[] = '	/**';
 			$output[] = '	 * Object initializer';
 			$output[] = '	 *';
 			$output[] = '	 */';
-			$output[] = '	protected function initializeObject() {';
+			$output[] = '	public function initializeObject() {';
 			$output[] = $this->pad(2, join($this->output['ClassConstructor'], "\n"));
 			$output[] = '	}';
 		}
@@ -221,6 +236,7 @@ class MOC_Extbase_Generator {
 			$this->output['ClassAccessors'][$key] = $this->applyMarkers($def, $replace);
 		}
 	}
+	
 
 	protected function buildConstructor($keys) {
 		foreach($keys as $key => $values) {
@@ -233,9 +249,12 @@ class MOC_Extbase_Generator {
 			if ($values['var'] === $this->className) {
 				continue;
 			}
-
 			$replace = $this->getKeyMarkers($values);
-			$def 	 = $this->loadClassConstructorTemplate($values['type']);
+			if($values['var'] === "DateTime") {
+				$def 	 = $this->loadClassConstructorTemplate('DateTime');
+			} else {
+				$def 	 = $this->loadClassConstructorTemplate($values['type']);
+			}
 			$this->output['ClassConstructor'][$key] = $this->applyMarkers($def, $replace);
 		}
 	}
@@ -275,13 +294,12 @@ class MOC_Extbase_Generator {
 	}
 
 	protected function loadClassConstructorTemplate($type) {
-		return $this->loadTemplate('ClassConstructor', $type);
+		return  $this->loadTemplate('ClassConstructor', $type);
 	}
 
 	protected function loadClassAccessorTemplate($type) {
 		return $this->loadTemplate('ClassAccessor', $type);
 	}
-
 	protected function loadTemplate($kind, $type) {
 		$filename = $this->templatePath . $kind . DIRECTORY_SEPARATOR . $type . '.tpl';
 		if (!is_file($filename)) {
