@@ -17,7 +17,7 @@ class MOC_Extbase_Generator {
 		'type' 		=> 'default',
 		'var' 		=> 'string',
 		'default' 	=> 'null',
-		'desc' 		=> '@todo Make a good description in the TCA ($column.extbase.desc)',
+		'desc' 		=> '@TODO: Make a good description in the TCA ($column.extbase.desc)',
 		'annotations' => array(
 
 		)
@@ -92,8 +92,6 @@ class MOC_Extbase_Generator {
 			$this->buildConstructor($keys);
 		}
 
-		
-		
 		$this->buildClassAccessors($keys);
 
 		$this->writeBaseClass();
@@ -112,8 +110,6 @@ class MOC_Extbase_Generator {
 		$output[] = $this->pad(1, join($this->output['ClassProperties'], "\n\n"));
 		$output[] = '';
 
-		
-		
 //		So far, dependency injection into dmain models are not supported in fomai models  (See bug 11311 in forge) 
 //		$output[] = '	/**';
 //	 	$output[] = '	 * Injector for Extbase ObjectManager';
@@ -124,7 +120,6 @@ class MOC_Extbase_Generator {
 //		$output[] = '	}';
 //		$output[] = '';
 
-		
 		// Disabled for now
 		if ($this->buildConstructor) {
 			$output[] = '	/**';
@@ -132,6 +127,7 @@ class MOC_Extbase_Generator {
 			$output[] = '	 *';
 			$output[] = '	 */';
 			$output[] = '	public function initializeObject() {';
+			$output[] = '		$objectManager = t3lib_div::makeInstance(\'Tx_Extbase_Object_ObjectManager\');';
 			$output[] = $this->pad(2, join($this->output['ClassConstructor'], "\n"));
 			$output[] = '	}';
 		}
@@ -236,7 +232,6 @@ class MOC_Extbase_Generator {
 			$this->output['ClassAccessors'][$key] = $this->applyMarkers($def, $replace);
 		}
 	}
-	
 
 	protected function buildConstructor($keys) {
 		foreach($keys as $key => $values) {
@@ -246,15 +241,18 @@ class MOC_Extbase_Generator {
 			}
 
 			// Avoid endless loop
-			if ($values['var'] === $this->className) {
+			if (($values['type'] !== 'storage') && ($values['var'] !== 'DateTime')) {
 				continue;
 			}
+			
 			$replace = $this->getKeyMarkers($values);
-			if($values['var'] === "DateTime") {
-				$def 	 = $this->loadClassConstructorTemplate('DateTime');
+			
+			if($values['var'] === 'DateTime') {
+				$def = $this->loadClassConstructorTemplate('DateTime');
 			} else {
-				$def 	 = $this->loadClassConstructorTemplate($values['type']);
+				$def = $this->loadClassConstructorTemplate($values['type']);
 			}
+			
 			$this->output['ClassConstructor'][$key] = $this->applyMarkers($def, $replace);
 		}
 	}
@@ -300,12 +298,13 @@ class MOC_Extbase_Generator {
 	protected function loadClassAccessorTemplate($type) {
 		return $this->loadTemplate('ClassAccessor', $type);
 	}
+	
 	protected function loadTemplate($kind, $type) {
 		$filename = $this->templatePath . $kind . DIRECTORY_SEPARATOR . $type . '.tpl';
 		if (!is_file($filename)) {
 			throw new MOC_Exception(sprintf('Template file %s does not exists', $filename));
 		}
-
 		return file_get_contents($filename);
 	}
+
 }
