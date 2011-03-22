@@ -36,7 +36,7 @@ public function add###KEY_SINGULAR###(###VAR### $###KEY_SINGULAR_LOWER###) {
  * @return ###SELF###
  */
 public function remove###KEY_SINGULAR###(###VAR### $###KEY_SINGULAR_LOWER###) {
-	###THIS###->###KEY_LOWER###->detatch($###KEY_SINGULAR_LOWER###);
+	###THIS###->###KEY_LOWER###->detach($###KEY_SINGULAR_LOWER###);
 	return ###THIS###;
 }
 
