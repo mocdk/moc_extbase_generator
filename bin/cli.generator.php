@@ -1,10 +1,14 @@
 <?php
 // Extbase autoloader :)
 if (!class_exists('Tx_Extbase_Utility_ClassLoader')) {
-	require(t3lib_extmgm::extPath('extbase') . 'Classes/Utility/ClassLoader.php');
+	require(t3lib_extMgm::extPath('extbase') . 'Classes/Utility/ClassLoader.php');
 
 	$classLoader = new Tx_Extbase_Utility_ClassLoader();
 	spl_autoload_register(array($classLoader, 'loadClass'));
+}
+
+if(t3lib_extMgm::isLoaded('moc_helpers')) {
+	require(t3lib_extMgm::extPath('moc_helpers') . 'Classes/Domain/Model/Abstract.php');
 }
 
 $args 	= $_SERVER['argv'];

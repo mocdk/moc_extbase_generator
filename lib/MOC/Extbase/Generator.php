@@ -14,13 +14,11 @@ class MOC_Extbase_Generator {
 	protected $configPath;
 
 	protected $defaultTemplateValues = array(
-		'type' 		=> 'default',
-		'var' 		=> 'string',
-		'default' 	=> 'null',
-		'desc' 		=> '@TODO: Make a good description in the TCA ($column.extbase.desc)',
-		'annotations' => array(
-
-		)
+		'type'			=> 'default',
+		'var'			=> 'string',
+		'default'		=> 'null',
+		'desc'			=> '@TODO: Make a good description in the TCA ($column.extbase.desc)',
+		'annotations'	=> array()
 	);
 
 	protected $buildConstructor = false;
@@ -28,11 +26,11 @@ class MOC_Extbase_Generator {
 	protected $output = array();
 
 	public function __construct($extension, $models = array()) {
-		$this->extension 		= $extension;
+		$this->extension		= $extension;
 		$this->models			= $models;
-		$this->extensionPath 	= t3lib_extMgm::extPath($extension);
-		$this->outputPath 		= $this->extensionPath . 'Classes/Domain/Model/Base/';
-		$this->configPath 		= $this->extensionPath . 'Classes/Domain/Configuration/';
+		$this->extensionPath	= t3lib_extMgm::extPath($extension);
+		$this->outputPath		= $this->extensionPath . 'Classes/Domain/Model/Base/';
+		$this->configPath		= $this->extensionPath . 'Classes/Domain/Configuration/';
 
 		$this->templatePath 	= t3lib_extMgm::extPath('moc_extbase_generator') . 'Resources/Private/Templates/';
 
@@ -110,7 +108,7 @@ class MOC_Extbase_Generator {
 		$output[] = $this->pad(1, join($this->output['ClassProperties'], "\n\n"));
 		$output[] = '';
 
-//		So far, dependency injection into dmain models are not supported in fomai models  (See bug 11311 in forge) 
+//		So far, dependency injection into domain models are not supported when unserializing models (See bug 11311 in forge) 
 //		$output[] = '	/**';
 //	 	$output[] = '	 * Injector for Extbase ObjectManager';
 //	 	$output[] = '	 * @param Tx_Extbase_Object_ObjectManagerInterface $objectManager';
@@ -227,6 +225,9 @@ class MOC_Extbase_Generator {
 
 	protected function buildClassAccessors($keys) {
 		foreach($keys as $key => $values) {
+			if(($values['type'] !== 'storage') && (stristr($values['var'], '_Domain_Model_') !== FALSE)) {
+				$values['type'] = 'object';
+			}
 			$replace = $this->getKeyMarkers($values);
 			$def     = $this->loadClassAccessorTemplate($values['type']);
 			$this->output['ClassAccessors'][$key] = $this->applyMarkers($def, $replace);
@@ -235,8 +236,8 @@ class MOC_Extbase_Generator {
 
 	protected function buildConstructor($keys) {
 		foreach($keys as $key => $values) {
-			// No need for constructor on normal strings
-			if ($values['type'] === 'default') {
+			// No need for constructor on normal strings nor oneToOne relations
+			if (($values['type'] === 'default') || ($values['type'] === 'object')) {
 				continue;
 			}
 
