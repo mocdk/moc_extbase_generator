@@ -21,7 +21,7 @@ class MOC_Extbase_Generator {
 		'annotations'	=> array()
 	);
 
-	protected $buildConstructor = false;
+	protected $buildConstructor = FALSE;
 
 	protected $output = array();
 
@@ -35,7 +35,7 @@ class MOC_Extbase_Generator {
 		$this->templatePath 	= t3lib_extMgm::extPath('moc_extbase_generator') . 'Resources/Private/Templates/';
 
 		if (!is_dir($this->outputPath)) {
-			mkdir($this->outputPath, 0777, true);
+			mkdir($this->outputPath, 0777, TRUE);
 		}
 
 		if (!is_dir($this->configPath)) {
@@ -59,7 +59,7 @@ class MOC_Extbase_Generator {
 			$file = basename($filepath, '.php');
 			$className = sprintf('Tx_%s_Domain_Configuration_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $file);
 			$this->className = sprintf('Tx_%s_Domain_Model_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $file);
-			if (!empty($this->models) && false === array_search(strtolower($file), $this->models)) {
+			if (!empty($this->models) && FALSE === array_search(strtolower($file), $this->models)) {
 				printf("Skipping model: %s\n", $className);
 				continue;
 			}
@@ -119,7 +119,7 @@ class MOC_Extbase_Generator {
 //		$output[] = '';
 
 		// Disabled for now
-		if ($this->buildConstructor) {
+		if ($this->buildConstructor && (count($this->output['ClassConstructor']) > 0)) {
 			$output[] = '	/**';
 			$output[] = '	 * Object initializer';
 			$output[] = '	 *';
@@ -128,6 +128,7 @@ class MOC_Extbase_Generator {
 			$output[] = '		$objectManager = t3lib_div::makeInstance(\'Tx_Extbase_Object_ObjectManager\');';
 			$output[] = $this->pad(2, join($this->output['ClassConstructor'], "\n"));
 			$output[] = '	}';
+			$output[] = '';
 		}
 		$output[] = $this->pad(1, join($this->output['ClassAccessors'], "\n\n"));
 		$output[] = '}';
@@ -152,7 +153,7 @@ class MOC_Extbase_Generator {
 
 	protected function reset() {
 		$this->output = array();
-		$this->buildConstructor = false;
+		$this->buildConstructor = FALSE;
 	}
 
 	protected function getKeyMarkers($values) {
@@ -198,7 +199,7 @@ class MOC_Extbase_Generator {
 		return $replace;
 	}
 
-	protected function getValidationParams($args, $rule = null, $key = null) {
+	protected function getValidationParams($args, $rule = NULL, $key = NULL) {
 		if (empty($args)) {
 			return '';
 		}
@@ -263,14 +264,14 @@ class MOC_Extbase_Generator {
 			$values = array_merge($this->defaultTemplateValues, $values);
 
 			if (($values['type'] == 'storage') || ($values['var'] == 'DateTime')) {
-				$this->buildConstructor = true;
+				$this->buildConstructor = TRUE;
 			}
 
 			if (empty($values['key'])) {
 				$values['key'] = $key;
 			}
 
-			if (stripos($values['key'], '_') !== false) {
+			if (stripos($values['key'], '_') !== FALSE) {
 				$fixed_key = MOC_Inflector::variable($values['key']);
 				$values['key'] = $fixed_key;
 			}

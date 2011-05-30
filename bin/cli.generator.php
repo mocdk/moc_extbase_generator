@@ -20,5 +20,10 @@ if (empty($ext)) {
 	exit(1);
 }
 
-$Generator = new MOC_Extbase_Generator($ext, $models);
-$Generator->process();
+try {
+	$Generator = new MOC_Extbase_Generator($ext, $models);
+	$Generator->process();
+} catch(Exception $e) {
+	echo chr(10).$e->getMessage().chr(10).chr(10);
+	print_r($e);
+}
