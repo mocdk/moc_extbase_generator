@@ -237,8 +237,8 @@ class MOC_Extbase_Generator {
 
 	protected function buildConstructor($keys) {
 		foreach($keys as $key => $values) {
-			// No need for constructor on normal strings nor oneToOne relations
-			if (($values['type'] === 'default') || ($values['type'] === 'object')) {
+			// No need for constructor on normal strings or oneToOne relations or if initialize is FALSE
+			if (($values['type'] === 'default') || ($values['type'] === 'object') || ($values['initialize'] === FALSE)) {
 				continue;
 			}
 
