@@ -1,8 +1,6 @@
 /**
  * Sets the ###KEY_SINGULAR###
  *
- * ###DESC###
- *
  * @param ###VAR### $###KEY_SINGULAR_LOWER###
  * @return ###SELF###
  */
@@ -13,8 +11,6 @@ public function set###KEY_UPPER###($###KEY_SINGULAR_LOWER###) {
 
 /**
  * Gets the ###KEY_SINGULAR###
- *
- * ###DESC###
  *
  * @return ###VAR###
  */

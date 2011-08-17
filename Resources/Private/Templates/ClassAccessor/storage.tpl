@@ -15,7 +15,7 @@ public function set###KEY_PLURAL###(Tx_Extbase_Persistence_ObjectStorage $###KEY
  * @return boolean
  */
 public function has###KEY_SINGULAR###(###VAR### $###KEY_SINGULAR_LOWER###) {
-    return true === $this->###KEY_LOWER###->contains($###KEY_SINGULAR_LOWER###);
+    return $this->###KEY_LOWER###->contains($###KEY_SINGULAR_LOWER###);
 }
 
 /**

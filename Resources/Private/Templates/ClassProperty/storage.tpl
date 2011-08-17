@@ -1,7 +1,6 @@
 /**
  * The ###KEY_PLURAL### class property
  *
- * ###DESC######ANNOTATIONS###
- * @var Tx_Extbase_Persistence_ObjectStorage<###VAR###>
+ * @var Tx_Extbase_Persistence_ObjectStorage<###VAR###>###ANNOTATIONS###
  */
 protected $###KEY_LOWER###;
