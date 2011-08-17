@@ -1,8 +1,6 @@
 /**
  * Sets the ###KEY_SINGULAR###
  *
- * ###DESC###
- *
  * @param ###VAR### $###KEY###
  * @return ###SELF###
  */
@@ -14,7 +12,6 @@ public function set###KEY_SINGULAR###(###VAR### $###KEY_SINGULAR_LOWER###) {
 /**
  * Gets the ###KEY_SINGULAR###
  *
- * ###DESC###
  * @return ###VAR###
  */
 public function get###KEY_SINGULAR###() {

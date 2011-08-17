@@ -13,7 +13,12 @@ $models = array_slice($args, 2);
 
 if (empty($ext)) {
 	printf("%s extbase_generate <extension> <model1, model2, model3>\n", $args[0]);
-	exit(1);
+	exit(PHP_EOL);
+}
+
+if (t3lib_extMgm::isLoaded($ext) === FALSE) {
+	printf('Extension "%s" is not loaded!', $ext);
+	exit(PHP_EOL);
 }
 
 $Generator = new MOC_Extbase_Generator($ext, $models);

@@ -17,7 +17,6 @@ class MOC_Extbase_Generator {
 		'type' 		=> 'default',
 		'var' 		=> 'string',
 		'default' 	=> 'null',
-		'desc' 		=> '@todo Make a good description in the TCA ($column.extbase.desc)',
 		'annotations' => array(
 
 		)
@@ -31,6 +30,7 @@ class MOC_Extbase_Generator {
 		$this->extension 		= $extension;
 		$this->models			= $models;
 		$this->extensionPath 	= t3lib_extMgm::extPath($extension);
+		$this->modelPath 		= $this->extensionPath . 'Classes/Domain/Model/';
 		$this->outputPath 		= $this->extensionPath . 'Classes/Domain/Model/Base/';
 		$this->configPath 		= $this->extensionPath . 'Classes/Domain/Configuration/';
 
@@ -62,10 +62,10 @@ class MOC_Extbase_Generator {
 			$className = sprintf('Tx_%s_Domain_Configuration_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $file);
 			$this->className = sprintf('Tx_%s_Domain_Model_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $file);
 			if (!empty($this->models) && false === array_search(strtolower($file), $this->models)) {
-				printf("Skipping model: %s\n", $className);
+				printf('Skipping model: %s' . PHP_EOL, $className);
 				continue;
 			}
-			printf("Processing model: %s\n", $className);
+			printf('Processing model: %s' . PHP_EOL, $className);
 
 			$this->currentFile = $file;
 
@@ -87,34 +87,33 @@ class MOC_Extbase_Generator {
 		$keys = $this->preprocessKeys($keys);
 
 		$this->buildClassProperties($keys);
-		
+
 		if ($this->buildConstructor) {
 			$this->buildConstructor($keys);
 		}
 
-		
-		
+
+
 		$this->buildClassAccessors($keys);
 
-		$this->writeBaseClass();
+		$this->writeModelBaseClass();
+		$this->writeModelClass();
 	}
 
-	protected function writeBaseClass() {
+	protected function writeModelBaseClass() {
 		$className = sprintf('Tx_%s_Domain_Model_Base_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $this->currentFile);
-		$extendsClass = class_exists('Tx_MocHelpers_Domain_Model_Abstract') ? 'Tx_MocHelpers_Domain_Model_Abstract' : 'Tx_Extbase_DomainObject_AbstractEntity';
+		$extendsClassName = class_exists('Tx_MocHelpers_Domain_Model_Abstract') ? 'Tx_MocHelpers_Domain_Model_Abstract' : 'Tx_Extbase_DomainObject_AbstractEntity';
 
 		$output = array();
 		$output[] = '<?php';
 		$output[] = '/**';
 		$output[] = ' * Generated on ' . date('r');
 		$output[] = ' */';
-		$output[] = 'abstract class ' . $className . ' extends ' . $extendsClass . ' {';
-		$output[] = $this->pad(1, join($this->output['ClassProperties'], "\n\n"));
+		$output[] = 'abstract class ' . $className . ' extends ' . $extendsClassName . ' {' . PHP_EOL;
+		$output[] = $this->pad(1, join($this->output['ClassProperties'], PHP_EOL . PHP_EOL));
 		$output[] = '';
 
-		
-		
-//		So far, dependency injection into dmain models are not supported in fomai models  (See bug 11311 in forge) 
+//		So far, dependency injection into dmain models are not supported in fomai models  (See bug 11311 in forge)
 //		$output[] = '	/**';
 //	 	$output[] = '	 * Injector for Extbase ObjectManager';
 //	 	$output[] = '	 * @param Tx_Extbase_Object_ObjectManagerInterface $objectManager';
@@ -124,36 +123,51 @@ class MOC_Extbase_Generator {
 //		$output[] = '	}';
 //		$output[] = '';
 
-		
 		// Disabled for now
 		if ($this->buildConstructor) {
 			$output[] = '	/**';
 			$output[] = '	 * Object initializer';
 			$output[] = '	 *';
+			$output[] = '	 * @return void';
 			$output[] = '	 */';
 			$output[] = '	public function initializeObject() {';
-			$output[] = $this->pad(2, join($this->output['ClassConstructor'], "\n"));
-			$output[] = '	}';
+			$output
+			$output[] = $this->pad(2, join($this->output['ClassConstructor'], PHP_EOL));
+			$output[] = '	}' . PHP_EOL;
 		}
-		$output[] = $this->pad(1, join($this->output['ClassAccessors'], "\n\n"));
-		$output[] = '}';
+		$output[] = $this->pad(1, join($this->output['ClassAccessors'], PHP_EOL . PHP_EOL));
+		$output[] = PHP_EOL . '}';
 
 		$targetFile = $this->outputPath . $this->currentFile . '.php';
-		file_put_contents($targetFile, join($output, "\n"));
+		file_put_contents($targetFile, join($output, PHP_EOL));
+	}
+
+	protected function writeModelClass() {
+		$targetFile = $this->modelPath . $this->currentFile . '.php';
+		if (file_exists($targetFile) === FALSE) {
+			$className = sprintf('Tx_%s_Domain_Model_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $this->currentFile);
+			$extendsClassName = sprintf('Tx_%s_Domain_Model_Base_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $this->currentFile);
+			$output = array(
+				'<?php',
+				'class ' . $className . ' extends ' . $extendsClassName . ' {',
+				'}'
+			);
+			file_put_contents($targetFile, join($output, PHP_EOL));
+		}
 	}
 
 	protected function pad($size, $string) {
 		$this->padSize = $size;
-		$lines = split("\n", $string);
+		$lines = split(PHP_EOL, $string);
 		$lines = array_map(array($this, '_pad'), $lines);
-		return join($lines, "\n");
+		return join($lines, PHP_EOL);
 	}
 
 	protected function _pad($a) {
 		if (empty($a)) {
 			return '';
 		}
-		return str_repeat("\t", $this->padSize) . $a;
+		return str_repeat(chr(9), $this->padSize) . $a;
 	}
 
 	protected function reset() {
@@ -178,7 +192,6 @@ class MOC_Extbase_Generator {
 		$replace['###THIS###']	 				= '$this';
 
 		$replace['###DEFAULT_VALUE###'] 		= $values['default'];
-		$replace['###DESC###']					= $values['desc'];
 		$replace['###VAR###']					= $values['var'];
 
 		$replace['###SELF###']					= $this->className;
@@ -186,19 +199,21 @@ class MOC_Extbase_Generator {
 
 		if (!empty($values['annotations'])) {
 			foreach ($values['annotations'] as $annotation) {
-				$replace['###ANNOTATIONS###'] .= sprintf("\n * @%s", $annotation);
+				$replace['###ANNOTATIONS###'] .= sprintf('@%s' . PHP_EOL . ' * ', $annotation);
 			}
 		}
 
 		if (!empty($values['validations'])) {
 			$validationRules = MOC_Array::normalize($values['validations']);
 			foreach ($validationRules as $rule => $args) {
-				$replace['###ANNOTATIONS###'] .= sprintf("\n * @validate %s%s", $rule, $this->getValidationParams($args, $rule, $key));
+				$replace['###ANNOTATIONS###'] .= sprintf(PHP_EOL . ' * @validate %s%s', $rule, $this->getValidationParams($args, $rule, $key));
 			}
 		}
 
 		if (!empty($replace['###ANNOTATIONS####'])) {
-			$replace['###ANNOTATIONS####'] = "\n *\n *" . $replace['###ANNOTATIONS###'];
+			$replace['###ANNOTATIONS####'] = PHP_EOL . ' *' . PHP_EOL . ' *' . $replace['###ANNOTATIONS###'];
+			$replace['###ANNOTATIONS####'] = PHP_EOL . ' *' . PHP_EOL . ' *' . $replace['###ANNOTATIONS###'];
+			$replace['###ANNOTATIONS####'] = PHP_EOL . ' *' . PHP_EOL . ' *' . $replace['###ANNOTATIONS###'];
 		}
 
 		return $replace;
@@ -212,7 +227,7 @@ class MOC_Extbase_Generator {
 			return sprintf('(%s)', $args);
 		}
 		if (is_array($args)) {
-			$rules = "";
+			$rules = '';
 			foreach ($args as $k => $v) {
 				$rules .= sprintf('%s=%s,', $k, $v);
 			}
@@ -236,7 +251,7 @@ class MOC_Extbase_Generator {
 			$this->output['ClassAccessors'][$key] = $this->applyMarkers($def, $replace);
 		}
 	}
-	
+
 
 	protected function buildConstructor($keys) {
 		foreach($keys as $key => $values) {
@@ -250,7 +265,7 @@ class MOC_Extbase_Generator {
 				continue;
 			}
 			$replace = $this->getKeyMarkers($values);
-			if($values['var'] === "DateTime") {
+			if($values['var'] === 'DateTime') {
 				$def 	 = $this->loadClassConstructorTemplate('DateTime');
 			} else {
 				$def 	 = $this->loadClassConstructorTemplate($values['type']);
