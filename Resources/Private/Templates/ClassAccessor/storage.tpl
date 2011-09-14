@@ -55,6 +55,6 @@ public function removeAll###KEY_PLURAL###() {
  *
  * @return Tx_Extbase_Persistence_ObjectStorage<###VAR###> An Tx_Extbase_Persistence_ObjectStorage holding instances of ###VAR###
  */
-public function get###CAMEL_CASE###() {
+public function get###KEY_PLURAL###() {
 	return ###THIS###->###KEY_LOWER###;
 }
