@@ -154,7 +154,7 @@ class MOC_Extbase_Generator {
 
 	protected function pad($size, $string) {
 		$this->padSize = $size;
-		$lines = split(PHP_EOL, $string);
+		$lines = explode(PHP_EOL, $string);
 		$lines = array_map(array($this, '_pad'), $lines);
 		return join($lines, PHP_EOL);
 	}
