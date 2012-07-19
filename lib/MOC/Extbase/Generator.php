@@ -131,7 +131,6 @@ class MOC_Extbase_Generator {
 			$output[] = '	 * @return void';
 			$output[] = '	 */';
 			$output[] = '	public function initializeObject() {';
-			$output
 			$output[] = $this->pad(2, join($this->output['ClassConstructor'], PHP_EOL));
 			$output[] = '	}' . PHP_EOL;
 		}
