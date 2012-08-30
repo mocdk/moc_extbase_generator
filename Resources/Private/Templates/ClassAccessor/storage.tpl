@@ -53,7 +53,7 @@ public function removeAll###KEY_PLURAL###() {
 /**
  * Returns the ###KEY_PLURAL_LOWER### ###VAR###
  *
- * @return Tx_Extbase_Persistence_ObjectStorage<###VAR###> An Tx_Extbase_Persistence_ObjectStorage holding instances of ###VAR###
+ * @return Tx_Extbase_Persistence_ObjectStorage<###VAR###>
  */
 public function get###KEY_PLURAL###() {
 	return ###THIS###->###KEY_LOWER###;
