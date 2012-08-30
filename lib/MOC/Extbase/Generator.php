@@ -85,7 +85,7 @@ class MOC_Extbase_Generator {
 		$keys = $this->preprocessKeys($keys);
 
 		$this->buildClassProperties($keys);
-		
+
 		if ($this->buildConstructor) {
 			$this->buildConstructor($keys);
 		}
@@ -109,7 +109,7 @@ class MOC_Extbase_Generator {
 		$output[] = $this->pad(1, join($this->output['ClassProperties'], PHP_EOL . PHP_EOL));
 		$output[] = '';
 
-//		So far, dependency injection into domain models are not supported when unserializing models (See bug 11311 in forge) 
+//		So far, dependency injection into domain models are not supported when unserializing models (See bug 11311 in forge)
 //		$output[] = '	/**';
 //	 	$output[] = '	 * Injector for Extbase ObjectManager';
 //	 	$output[] = '	 * @param Tx_Extbase_Object_ObjectManagerInterface $objectManager';
@@ -244,7 +244,7 @@ class MOC_Extbase_Generator {
 				$values['type'] = 'object';
 			}
 			$replace = $this->getKeyMarkers($values);
-			$def     = $this->loadClassAccessorTemplate($values['type']);
+			$def = $this->loadClassAccessorTemplate($values['type']);
 			$this->output['ClassAccessors'][$key] = $this->applyMarkers($def, $replace);
 		}
 	}
@@ -260,15 +260,15 @@ class MOC_Extbase_Generator {
 			if (($values['type'] !== 'storage') && ($values['var'] !== 'DateTime')) {
 				continue;
 			}
-			
+
 			$replace = $this->getKeyMarkers($values);
-			
+
 			if ($values['var'] === 'DateTime') {
 				$def = $this->loadClassConstructorTemplate('DateTime');
 			} else {
 				$def = $this->loadClassConstructorTemplate($values['type']);
 			}
-			
+
 			$this->output['ClassConstructor'][$key] = $this->applyMarkers($def, $replace);
 		}
 	}
@@ -308,7 +308,7 @@ class MOC_Extbase_Generator {
 	}
 
 	protected function loadClassConstructorTemplate($type) {
-		return  $this->loadTemplate('ClassConstructor', $type);
+		return $this->loadTemplate('ClassConstructor', $type);
 	}
 
 	protected function loadClassAccessorTemplate($type) {

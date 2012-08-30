@@ -46,7 +46,7 @@ class MOC_Extbase_Generator_TCA extends MOC_Extbase_Generator_Configuration {
 		$ctrl = $GLOBALS['TCA'][$this->table]['ctrl'];
 
 		if (!empty($ctrl['tstamp'])) {
-			$columns[$ctrl['tstamp']] = array('var' => 'DateTime',  'desc' => 'Timestamp for last update to the record');
+			$columns[$ctrl['tstamp']] = array('var' => 'DateTime', 'desc' => 'Timestamp for last update to the record');
 		}
 
 		if (!empty($ctrl['crdate'])) {
