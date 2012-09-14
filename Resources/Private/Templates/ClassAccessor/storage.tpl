@@ -1,7 +1,7 @@
 /**
  * Setter for ###KEY###
  *
- * @param Tx_Extbase_Persistence_ObjectStorage $###KEY_SINGULAR_LOWER### An Object Storage containing ###VAR### instances
+ * @param Tx_Extbase_Persistence_ObjectStorage $###KEY_PLURAL_LOWER### An Object Storage containing ###VAR### instances
  * @return ###SELF###
  */
 public function set###KEY_PLURAL###(Tx_Extbase_Persistence_ObjectStorage $###KEY_PLURAL_LOWER###) {
@@ -12,6 +12,7 @@ public function set###KEY_PLURAL###(Tx_Extbase_Persistence_ObjectStorage $###KEY
 /**
  * Check if a ###KEY_SINGULAR_LOWER### exists in the storage
  *
+ * @param ###VAR### $###KEY_SINGULAR_LOWER###
  * @return boolean
  */
 public function has###KEY_SINGULAR###(###VAR### $###KEY_SINGULAR_LOWER###) {
