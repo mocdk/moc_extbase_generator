@@ -1,7 +1,7 @@
 <?php
 
 ########################################################################
-# Extension Manager/Repository config file for ext "bc_shop".
+# Extension Manager/Repository config file for ext "moc_extbase_generator".
 #
 # Auto generated 03-11-2010 12:16
 #
@@ -13,11 +13,11 @@
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Extbase generators',
 	'description' => '',
-	'category' => 'MOC_BASE',
-	'author' => 'Christian Winther',
-	'author_email' => 'cwin@mocsystems.com',
+	'category' => 'backend',
+	'author' => 'Aske Ertmann, Christian Winther',
+	'author_email' => 'aske@moc.net',
 	'shy' => '',
-	'dependencies' => 'moc_base',
+	'dependencies' => 'extbase',
 	'conflicts' => '',
 	'priority' => '',
 	'module' => '',
@@ -29,10 +29,10 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
 	'author_company' => '',
-	'version' => '0.0.0',
+	'version' => '1.0.0',
 	'constraints' => array(
 		'depends' => array(
-			'moc_base' => '',
+			'extbase' => '1.3',
 		),
 		'conflicts' => array(
 		),
