@@ -1,17 +1,4 @@
 /**
- * Setter for ###KEY###
- *
- * @param Tx_Extbase_Persistence_ObjectStorage $###KEY_PLURAL_LOWER### An Object Storage containing ###VAR### instances
- * @return ###SELF###
- */
-public function set###KEY_PLURAL###(Tx_Extbase_Persistence_ObjectStorage $###KEY_PLURAL_LOWER###) {
-	###THIS###->###KEY_LOWER### = $###KEY_PLURAL_LOWER###;
-	return ###THIS###;
-}
-
-/**
- * Check if a ###KEY_SINGULAR_LOWER### exists in the storage
- *
  * @param ###VAR### $###KEY_SINGULAR_LOWER###
  * @return boolean
  */
@@ -20,8 +7,6 @@ public function has###KEY_SINGULAR###(###VAR### $###KEY_SINGULAR_LOWER###) {
 }
 
 /**
- * Adds a ###KEY_SINGULAR_LOWER###
- *
  * @param ###VAR### $###KEY_SINGULAR_LOWER###
  * @return ###SELF###
  */
@@ -31,8 +16,6 @@ public function add###KEY_SINGULAR###(###VAR### $###KEY_SINGULAR_LOWER###) {
 }
 
 /**
- * Removes a ###KEY_SINGULAR_LOWER###
- *
  * @param ###VAR### $###KEY_SINGULAR_LOWER###
  * @return ###SELF###
  */
@@ -42,18 +25,23 @@ public function remove###KEY_SINGULAR###(###VAR### $###KEY_SINGULAR_LOWER###) {
 }
 
 /**
- * Remove all ###KEY_PLURAL_LOWER###
- *
  * @return ###SELF###
  */
-public function removeAll###KEY_PLURAL###() {
+public function remove###KEY_PLURAL###() {
 	###THIS###->###KEY_LOWER### = new Tx_Extbase_Persistence_ObjectStorage();
 	return ###THIS###;
 }
 
 /**
- * Returns the ###KEY_PLURAL_LOWER### ###VAR###
- *
+ * @param Tx_Extbase_Persistence_ObjectStorage $###KEY_PLURAL_LOWER### An Object Storage containing ###VAR### instances
+ * @return ###SELF###
+ */
+public function set###KEY_PLURAL###(Tx_Extbase_Persistence_ObjectStorage $###KEY_PLURAL_LOWER###) {
+	###THIS###->###KEY_LOWER### = $###KEY_PLURAL_LOWER###;
+	return ###THIS###;
+}
+
+/**
  * @return Tx_Extbase_Persistence_ObjectStorage<###VAR###>
  */
 public function get###KEY_PLURAL###() {
