@@ -230,7 +230,7 @@ class Tx_MocExtbaseGenerator_Command_Generator extends t3lib_cli {
 	protected function writeRepositoryClass() {
 		$targetFile = $this->repositoryPath . $this->model . 'Repository.php';
 		if (file_exists($targetFile) === FALSE) {
-			$className = sprintf('Tx_%s_Domain_Repository_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $this->model);
+			$className = sprintf('Tx_%s_Domain_Repository_%sRepository', t3lib_div::underscoredToUpperCamelCase($this->extension), $this->model);
 			$extendsClassName = t3lib_extMgm::isLoaded('moc_helpers') ? 'Tx_MocHelpers_Domain_Repository_MocRepository' : 'Tx_Extbase_Persistence_Repository';
 			$output = array(
 				'<?php',
