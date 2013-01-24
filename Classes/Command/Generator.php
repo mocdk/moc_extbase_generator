@@ -1,4 +1,8 @@
 <?php
+if (!defined('TYPO3_cliMode')) {
+	die('You cannot run this script directly!');
+}
+
 class Tx_MocExtbaseGenerator_Command_Generator extends t3lib_cli {
 
 	/**
