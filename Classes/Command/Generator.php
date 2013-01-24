@@ -134,7 +134,7 @@ class Tx_MocExtbaseGenerator_Command_Generator extends t3lib_cli {
 		$tablePrefix = 'tx_' . str_replace('_', '', $this->extension);
 		foreach (array_keys($GLOBALS['TCA']) as $table) {
 			if (substr($table, 0, strlen($tablePrefix)) === $tablePrefix) {
-				$model = ucfirst(str_replace(array($tablePrefix . '_', 'domain_model_'), '', $table));
+				$model = t3lib_div::underscoredToUpperCamelCase(str_replace(array($tablePrefix . '_', 'domain_model_'), '', $table));
 				$this->className = sprintf('Tx_%s_Domain_Model_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $model);
 				if (!empty($this->models) && FALSE === array_search(strtolower($model), $this->models)) {
 					printf('Skipping model: %s' . PHP_EOL, $model);
