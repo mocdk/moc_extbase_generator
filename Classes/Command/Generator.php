@@ -177,11 +177,10 @@ class Tx_MocExtbaseGenerator_Command_Generator extends t3lib_cli {
 	 */
 	protected function writeModelBaseClass() {
 		$className = sprintf('Tx_%s_Domain_Model_Base_%s', t3lib_div::underscoredToUpperCamelCase($this->extension), $this->model);
-		$extendsClassName = t3lib_extMgm::isLoaded('moc_helpers') ? 'Tx_MocHelpers_Domain_Model_Abstract' : 'Tx_Extbase_DomainObject_AbstractEntity';
 
 		$output = array();
 		$output[] = '<?php';
-		$output[] = 'abstract class ' . $className . ' extends ' . $extendsClassName . ' {' . PHP_EOL;
+		$output[] = 'abstract class ' . $className . ' extends Tx_Extbase_DomainObject_AbstractEntity {' . PHP_EOL;
 		$output[] = $this->pad(1, join($this->output['ClassProperties'], PHP_EOL . PHP_EOL));
 		$output[] = '';
 
