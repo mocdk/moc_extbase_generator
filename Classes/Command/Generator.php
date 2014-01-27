@@ -362,7 +362,7 @@ class Tx_MocExtbaseGenerator_Command_Generator extends t3lib_cli {
 	protected function buildClassAccessors(array $columns) {
 		foreach ($columns as $column => $config) {
 			if (($config['dataType'] !== 'storage') && (stristr($config['var'], '_Domain_Model_') !== FALSE)) {
-				$config['dataType'] = 'object';
+				$config['dataType'] = isset($config['minitems']) && intval($config['minitems']) === 0 ? 'nullableobject' : 'object';
 			}
 			$replace = $this->getKeyMarkers($config);
 			$def = $this->loadClassAccessorTemplate($config['dataType']);
